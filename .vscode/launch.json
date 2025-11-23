@@ -1,0 +1,31 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "Docker: Attach to .NET",
+			"type": "coreclr",
+			"request": "attach",
+			"platform": "netCore",
+			"sourceFileMap": {
+				"/src": "${workspaceFolder}"
+			}
+		},
+		{
+			"name": "Docker: Compose Debug (.NET + MSSQL)",
+			"type": "docker",
+			"request": "launch",
+			"preLaunchTask": "docker-compose up (debug)",
+			"postDebugTask": "docker-compose down",
+			"platform": "netCore",
+			"netCore": {
+				"appProject": "SistemaAcademicoMonolitico.csproj"
+			},
+			"dockerCompose": {
+				"fileName": "docker-compose.yml"
+			},
+			"sourceFileMap": {
+				"/src": "${workspaceFolder}"
+			}
+		}
+	]
+}

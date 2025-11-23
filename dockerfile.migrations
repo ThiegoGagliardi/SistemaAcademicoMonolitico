@@ -1,0 +1,26 @@
+# Dockerfile.Migrations
+# ====================================================================
+# Estágio Migrator: Focado em rodar EF Core Database Update
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS migrator
+WORKDIR /app
+
+# Copia o arquivo de projeto e restaura os pacotes primeiro.
+# Isso garante que todas as dependências do SDK estejam prontas.
+COPY ["SistemaAcademicoMonolitico.csproj", "./"]
+RUN dotnet restore "SistemaAcademicoMonolitico.csproj"
+
+# 1. Instala a ferramenta dotnet-ef globalmente. 
+# O restore prévio e a estrutura simples aumentam a chance de sucesso.
+RUN dotnet nuget locals all --clear \
+    && dotnet tool install --global dotnet-ef --version 8.0.0
+
+# Adiciona o caminho onde o dotnet-ef foi instalado ao PATH.
+# Isso permite que o comando 'dotnet ef' seja reconhecido.
+ENV PATH="${PATH}:/root/.dotnet/tools"
+
+# Copia o restante do código-fonte (suas classes e migrations)
+COPY . .
+
+# Comando que realmente executa as migrações:
+# O comando roda após a dependência do compose (sqlserver-db: service_healthy) ser satisfeita.
+ENTRYPOINT ["dotnet", "ef", "database", "update", "--project", "SistemaAcademicoMonolitico.csproj"]

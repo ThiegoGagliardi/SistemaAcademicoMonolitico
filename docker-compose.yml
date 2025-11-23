@@ -1,0 +1,57 @@
+services:
+  # Serviço do SQL Server Express (AGORA COM HEALTHCHECK)
+  sqlserver-db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: mssql_db
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "S3nh@Academi.c0" 
+      MSSQL_PID: "Express"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqldata:/var/opt/mssql
+    restart: always
+    healthcheck: # ESSENCIAL para a condição 'service_healthy'
+      test: [ "CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -C -S localhost -U sa -P \"S3nh@Academi.c0\" -Q \"SELECT 1\" || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    # ...      
+  # Migration
+  migrations:
+    build:
+      context: .
+      dockerfile: dockerfile.migrations
+    depends_on:
+      sqlserver-db:
+        condition: service_healthy # AGORA FUNCIONA, POIS O BD TEM HEALTHCHECK
+    # Este serviço é um "one-off" (roda e para)
+    environment: # <-- NOVO BLOCO AQUI
+      # Variável DEVE ser fornecida ao processo de migração
+      DB_CONNECTION_STRING: "Server=sqlserver-db,1433;Database=SystemaAcademicoBD;User Id=sa;Password=S3nh@Academi.c0;TrustServerCertificate=True"
+    # ...    
+
+  # Serviço do Aplicativo .NET Core
+  sistemaacademicoapp-api:
+    build:
+      context: .
+      target: debug
+      dockerfile: dockerfile # Se o seu arquivo principal for Dockerfile.API
+    container_name: sistemaacademicoapp_container
+    ports:
+      - "8080:8080"
+      - "5000:5000"
+    environment:
+      # Nota: O nome do servidor AQUI é o nome do serviço (sqlserver-db)
+      DB_CONNECTION_STRING: "Server=sqlserver-db,1433;Database=SystemaAcademicoBD;User Id=sa;Password=S3nh@Academi.c0;TrustServerCertificate=True"
+      ASPNETCORE_ENVIRONMENT: "Development"
+    depends_on:
+      migrations: # A ÚNICA DEPENDÊNCIA NECESSÁRIA PARA GARANTIR A ORDEM
+        condition: service_completed_successfully
+    restart: always
+
+# Volumes para persistência de dados
+volumes:
+  sqldata:

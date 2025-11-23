@@ -1,0 +1,8 @@
+using SistemaAcademicoMonolitico.src.Domain.Entities;
+
+namespace SistemaAcademicoMonolitico.src.Domain.Repositories.Interfaces;
+
+public interface IAlunoRepository : IRepository<Aluno>
+{
+    Task<Aluno> MatricularAlunoCursoAsync(MatriculaAlunoCurso matricula);
+}
