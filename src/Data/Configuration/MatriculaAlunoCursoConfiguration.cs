@@ -23,12 +23,12 @@ public class MatriculaAlunoCursoConfiguration : IEntityTypeConfiguration<Matricu
                .HasColumnType("Date");
 
         builder.HasOne(m => m.Aluno)
-               .WithMany()
+               .WithMany(a => a.Matriculas)
                .HasForeignKey(m => m.AlunoId)
                .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(m => m.Curso)
-               .WithMany()
+               .WithMany(c => c.Alunos)
                .HasForeignKey(m => m.CursoId)
                .OnDelete(DeleteBehavior.Restrict);               
     }

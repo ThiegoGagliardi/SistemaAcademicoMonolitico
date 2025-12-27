@@ -27,12 +27,12 @@ public class CursoDisciplinaConfiguration : IEntityTypeConfiguration<CursoDiscip
                .HasColumnType("bit");
 
         builder.HasOne(cs =>cs.Curso)
-               .WithMany()
+               .WithMany(c => c.Disciplinas)
                .HasForeignKey(cs => cs.CursoId)
                .OnDelete(DeleteBehavior.Restrict);                
 
         builder.HasOne(cs => cs.Disciplina)
-               .WithMany()
+               .WithMany(d => d.Cursos)
                .HasForeignKey(cs => cs.DisciplinaId)
                .OnDelete(DeleteBehavior.Restrict);          
     }

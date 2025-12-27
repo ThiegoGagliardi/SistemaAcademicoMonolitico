@@ -14,7 +14,7 @@ public class Formacao
 
     public AreaConhecimento AreaConhecimento { get; set; }    
 
-    public decimal ValorPontuacao { get; set; }
+    public double ValorPontuacao { get; set; }
 
     public IList<Disciplina> Disciplinas { get; set;} = new List<Disciplina>();
 

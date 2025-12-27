@@ -7,5 +7,5 @@ public interface IRepository<TEntity> where TEntity : class
     Task<IEnumerable<TEntity>> GetAllAsync(int? pagina, int? quantidade);
     Task<TEntity> AddAsync(TEntity entity);
     Task<TEntity> UpdateAsync(TEntity entity);
-    Task<int> DeleteAsync(int id);
+    Task<TEntity> DeleteAsync(int id);
 }

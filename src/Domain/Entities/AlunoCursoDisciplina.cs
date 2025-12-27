@@ -20,7 +20,7 @@ public class AlunoCursoDisciplina
 
     public Aluno Aluno { get; set; }
 
-    public Curso Curso { get; set;}    
+    public Curso Curso { get; set;}
 
     public Disciplina Disciplina { get; set;}
 }

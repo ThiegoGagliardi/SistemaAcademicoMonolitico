@@ -9,7 +9,7 @@ public class ProfessorRetornoDTO
     public string Nome { get; set ;} = string.Empty;
     public string RegistroMec { get; set; } = string.Empty;
     public double Pontuacao { get; set; }
-    public DateOnly DataContratacao { get; set; }
+    public DateTime DataContratacao { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public IList<HorarioRetornoDTO> Horarios { get; set; } = [];

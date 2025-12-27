@@ -9,7 +9,7 @@ public class AlunoCursoDisciplinaConfiguration : IEntityTypeConfiguration<AlunoC
 {
     public void Configure(EntityTypeBuilder<AlunoCursoDisciplina> builder)
     {
-        builder.ToTable("Aluno_Cruso_Discplina");
+        builder.ToTable("Aluno_Curso_Discplina");
 
         builder.HasKey(ac => new {ac.AlunoId, ac.DisciplinaId, ac.CursoId});
 
@@ -29,20 +29,18 @@ public class AlunoCursoDisciplinaConfiguration : IEntityTypeConfiguration<AlunoC
                .HasMaxLength(100);
 
         builder.HasOne(ac => ac.Aluno)
-               .WithMany()
+               .WithMany(a => a.Disciplinas)
                .HasForeignKey(ac => ac.AlunoId)
                .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(ac => ac.Curso)
-               .WithMany()
+               .WithMany(c => c.AlunosDisciplinas)
                .HasForeignKey(ac => ac.CursoId)
                .OnDelete(DeleteBehavior.Restrict);
     
         builder.HasOne(ac => ac.Disciplina)
-               .WithMany()
+               .WithMany(d => d.CursosDisciplinas)
                .HasForeignKey(ac => ac.DisciplinaId)
                .OnDelete(DeleteBehavior.Restrict);    
     }
-    
-
 }

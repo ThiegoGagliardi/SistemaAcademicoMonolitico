@@ -10,5 +10,5 @@ public class FormacaoEnvioDTO
 
     public string AreaConhecimento { get; set; } = string.Empty;    
 
-    public decimal ValorPontuacao { get; set; }
+    public double ValorPontuacao { get; set; }
 }

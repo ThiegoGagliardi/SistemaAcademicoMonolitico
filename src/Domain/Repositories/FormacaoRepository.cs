@@ -3,12 +3,14 @@ using Microsoft.EntityFrameworkCore;
 using SistemaAcademicoMonolitico.src.Domain.Entities;
 using SistemaAcademicoMonolitico.src.Data;
 using SistemaAcademicoMonolitico.src.Domain.Repositories.Interfaces;
+using SistemaAcademicoMonolitico.src.Domain.Enum;
+using SistemaAcademicoMonolitico.Domain.Enums;
 
 namespace SistemaAcademicoMonolitico.src.Domain.Repositories;
 
 public class FormacaoRepository : IFormacaoRepository
 {
-    private SistemaAcademicoDbContext _context;
+    private readonly SistemaAcademicoDbContext _context;
 
     public FormacaoRepository(SistemaAcademicoDbContext context)
     {
@@ -32,9 +34,9 @@ public class FormacaoRepository : IFormacaoRepository
         return formacao;
     }
 
-    public async Task<int> DeleteAsync(int id)
+    public async Task<Formacao> DeleteAsync(int id)
     {
-        var formacoesLocate = await _context.Formacoes.FirstOrDefaultAsync(p => p.Id == id);
+        var formacoesLocate = await _context.Formacoes.FirstOrDefaultAsync(f => f.Id == id);
 
         if (formacoesLocate == null)
             throw new Exception("Formação não localizado");
@@ -42,7 +44,7 @@ public class FormacaoRepository : IFormacaoRepository
         _context.Formacoes.Remove(formacoesLocate);
         await _context.SaveChangesAsync();
 
-        return formacoesLocate.Id;
+        return formacoesLocate;
     }
 
     public async Task<IEnumerable<Formacao>> GetAllAsync(int? pagina, int? quantidade)
@@ -58,7 +60,7 @@ public class FormacaoRepository : IFormacaoRepository
 
     public async Task<Formacao> GetByIdAsync(int id)
     {
-        var formacoesLocate = await _context.Formacoes.FirstOrDefaultAsync(p => p.Id == id);
+        var formacoesLocate = await _context.Formacoes.FirstOrDefaultAsync(f => f.Id == id);
 
         if (formacoesLocate == null)
             throw new Exception("Formação não localizado");
@@ -66,12 +68,32 @@ public class FormacaoRepository : IFormacaoRepository
         return formacoesLocate;
     }
 
-    public async Task<Formacao> UpdateAsync(Formacao formacao)
+    public async Task<IEnumerable<Formacao>> GetByNivelAsync(NivelFormacao nivel)
     {
-        var formacoesLocate = await _context.Formacoes.FirstOrDefaultAsync(p => p.Id == formacao.Id);
+        var formacoes = await _context.Formacoes.Where(f => f.Nivel == nivel).ToListAsync();
+
+        if (formacoes == null)
+            throw new Exception("Formação não localizado");
+
+        return formacoes;
+    }
+
+    public async Task<IEnumerable<Formacao>> GetByNomeAsync(string nome)
+    {
+        var formacoesLocate =  await  _context.Formacoes.Where(f => f.Nome == nome).ToListAsync();
 
         if (formacoesLocate == null)
-            throw new Exception("Professor não localizado.");
+            throw new Exception("Formação não localizado");
+
+        return formacoesLocate;
+    }        
+
+    public async Task<Formacao> UpdateAsync(Formacao formacao)
+    {
+        var formacoesLocate = await _context.Formacoes.FirstOrDefaultAsync(f => f.Id == formacao.Id);
+
+        if (formacoesLocate == null)
+            throw new Exception("Formação não localizada.");
 
         formacoesLocate.Nome             = formacao.Nome;
         formacoesLocate.Instituicao      = formacao.Instituicao;

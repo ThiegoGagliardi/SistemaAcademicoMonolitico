@@ -4,9 +4,8 @@ using System;
 
 namespace SistemaAcademicoMonolitico.src.DTOs;
 
-public class DisplinaRetornoDTO
+public class DisciplinaRetornoDTO
 {
-
     public int Id { get; set; }
 
     public string Nome { get; set; } = string.Empty;      

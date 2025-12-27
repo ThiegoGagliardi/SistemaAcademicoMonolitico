@@ -29,11 +29,11 @@ public class ProfessorService : IProfessorService
 
     public async Task<ProfessorRetornoDTO> AddAsync(ProfessorEnvioDTO professorDTO)
     {
-        var novoProfessor = await _professorFactory.CriarProfessorAsync(professorDTO);
+        var novoProfessor = _professorFactory.CriarProfessor(professorDTO);
 
         novoProfessor = await _professorRepository.AddAsync(novoProfessor);                                                         
          
-        return await _professorFactory.CriarProfessorDTOAsync(novoProfessor,
+        return _professorFactory.CriarProfessorDTO(novoProfessor,
                                                              _formacaoFactory,
                                                              _horarioFactory);
     }
@@ -42,76 +42,91 @@ public class ProfessorService : IProfessorService
     {
         var professores = await _professorRepository.GetAllAsync(pagina, quantidade);
 
-        ICollection<ProfessorRetornoDTO> productRequestDTOs = new List<ProfessorRetornoDTO>();
+        ICollection<ProfessorRetornoDTO> professoresRequestDTOs = new List<ProfessorRetornoDTO>();
 
         foreach (var professor in professores)
         {
-            productRequestDTOs.Add(await _professorFactory.CriarProfessorDTOAsync(professor,
-                                                                                _formacaoFactory,
-                                                                                _horarioFactory));
+            professoresRequestDTOs.Add(_professorFactory.CriarProfessorDTO(professor,
+                                                                           _formacaoFactory,
+                                                                           _horarioFactory));
         }
 
-        return productRequestDTOs;
+        return professoresRequestDTOs;
     }
 
     public async Task<ProfessorRetornoDTO> GetByRegistroMecAsync(string registroMec)
     {
         var professor = await _professorRepository.GetByRegistroMecAsync(registroMec);
 
-        return await _professorFactory.CriarProfessorDTOAsync(professor,
-                                                             _formacaoFactory,
-                                                             _horarioFactory);        
+        return _professorFactory.CriarProfessorDTO(professor,
+                                                   _formacaoFactory,
+                                                   _horarioFactory);        
     }
 
     public async Task<ProfessorRetornoDTO> GetByIdAsync(int id)
     {
         var professor = await _professorRepository.GetByIdAsync(id);
 
-        return await _professorFactory.CriarProfessorDTOAsync(professor,
-                                                             _formacaoFactory,
-                                                             _horarioFactory);
+        return _professorFactory.CriarProfessorDTO(professor,
+                                                   _formacaoFactory,
+                                                   _horarioFactory);
     }
 
     public async Task<ProfessorRetornoDTO> UpdateAsync(ProfessorAtualizaDTO professorDto)
     {
-        var professor = await _professorFactory.CriarProfessorAsync(professorDto);
+        var professor = _professorFactory.CriarProfessor(professorDto);
 
         professor = await _professorRepository.UpdateAsync(professor);
 
-        return await _professorFactory.CriarProfessorDTOAsync(professor,
-                                                             _formacaoFactory,
-                                                             _horarioFactory);
+        return _professorFactory.CriarProfessorDTO(professor,
+                                                   _formacaoFactory,
+                                                   _horarioFactory);
     }
 
-    public async Task<ProfessorRetornoDTO> AdicionarFormacaoProfessorAsync(ProfessorFormacaoDTO formacaoDTO)
+    public async Task<ProfessorRetornoDTO> AdicionarFormacaoProfessorAsync(ProfessorFormacaoDTO professorFormacaoDTO)
     {
-        var formacao  = await _professorFactory.CriarProfessorFormacaoAsync(formacaoDTO);
+        var formacao  = _professorFactory.CriarProfessorFormacao(professorFormacaoDTO);
 
         await _professorRepository.AdicionarFormacaoProfessorAsync(formacao);
 
-        var professor = await _professorRepository.GetByIdAsync(formacaoDTO.ProfessorId);
+        var professor = await _professorRepository.GetByIdAsync(professorFormacaoDTO.ProfessorId);
 
-        return await _professorFactory.CriarProfessorDTOAsync(professor,
-                                                             _formacaoFactory,
-                                                             _horarioFactory);        
+        return _professorFactory.CriarProfessorDTO(professor,
+                                                   _formacaoFactory,
+                                                   _horarioFactory);        
     }
 
-    public async Task<int> DeleteAsync(int id)
+    public async Task<ProfessorRetornoDTO> DeleteAsync(int id)
     {
-        return await _professorRepository.DeleteAsync(id);
+        var professor = await _professorRepository.DeleteAsync(id);
+        return _professorFactory.CriarProfessorDTO(professor,
+                                                   _formacaoFactory,
+                                                   _horarioFactory);
     }
 
     public async Task<ProfessorRetornoDTO> AdicionarGradeHorariaProfessorAsync(GradeHorariaEnvioDTO gradeDTO)
     {
 
-        var grade  = await _professorFactory.CriarGradeHorariaAsync(gradeDTO);
+        var grade  = _professorFactory.CriarGradeHoraria(gradeDTO);
 
         await _professorRepository.AdicionarGradeHorariaProfessorAsync(grade);
 
         var professor = await _professorRepository.GetByIdAsync(gradeDTO.ProfessorId);
 
-        return await _professorFactory.CriarProfessorDTOAsync(professor,
-                                                             _formacaoFactory,
-                                                             _horarioFactory);        
-    }             
+        return _professorFactory.CriarProfessorDTO(professor,
+                                                   _formacaoFactory,
+                                                   _horarioFactory);        
+   }
+
+    public async Task<ProfessorRetornoDTO> AtualizaPontuacaoAsync(int id)
+    {
+        var professor = await _professorRepository.GetByIdAsync(id);
+
+        professor.AtualizarPotuacao();
+
+        return _professorFactory.CriarProfessorDTO(professor,
+                                                   _formacaoFactory,
+                                                   _horarioFactory);
+    }   
+
 }

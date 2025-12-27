@@ -32,17 +32,17 @@ public class GradeHorariaConfiguration : IEntityTypeConfiguration<GradeHoraria>
                .IsRequired();                              
 
         builder.HasOne(gh =>gh.Curso)
-               .WithMany()
+               .WithMany(c => c.Horarios)
                .HasForeignKey(cs => cs.CursoId)
                .OnDelete(DeleteBehavior.Restrict);                
 
         builder.HasOne(gh => gh.Disciplina)
-               .WithMany()
+               .WithMany(d => d.Horarios)
                .HasForeignKey(cs => cs.DisciplinaId)
                .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(gh => gh.Professor)
-               .WithMany()
+               .WithMany(p => p.Horarios)
                .HasForeignKey(gh => gh.ProfessorId)
                .OnDelete(DeleteBehavior.Restrict);                            
     }

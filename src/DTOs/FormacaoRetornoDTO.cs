@@ -12,5 +12,5 @@ public class FormacaoRetornoDTO
 
     public string AreaConhecimento { get; set; } = string.Empty;    
 
-    public decimal ValorPontuacao { get; set; }
+    public double ValorPontuacao { get; set; }
 }

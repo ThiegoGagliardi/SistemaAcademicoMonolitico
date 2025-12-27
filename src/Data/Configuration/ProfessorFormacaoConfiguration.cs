@@ -9,7 +9,7 @@ public class ProfessorFormacaoConfiguration : IEntityTypeConfiguration<Professor
 {
     public void Configure(EntityTypeBuilder<ProfessorFormacao> builder)
     {
-        builder.ToTable("ProfessoresFormacoes");
+        builder.ToTable("Professores_Formacoes");
 
         builder.HasKey(pf => new{pf.ProfessorId, pf.FormacaoId} );
 
@@ -22,12 +22,12 @@ public class ProfessorFormacaoConfiguration : IEntityTypeConfiguration<Professor
                .HasColumnType("Date");
 
         builder.HasOne(pf => pf.Professor)
-               .WithMany()
+               .WithMany(p => p.Formacoes)
                .HasForeignKey(pf => pf.ProfessorId)
                .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(pf => pf.Formacao)
-               .WithMany()
+               .WithMany(p => p.Professores)
                .HasForeignKey(pf => pf.FormacaoId)
                .OnDelete(DeleteBehavior.Restrict);               
     }

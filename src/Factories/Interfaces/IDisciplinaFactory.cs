@@ -5,9 +5,11 @@ namespace SistemaAcademicoMonolitico.src.Factories.Interfaces;
 
 public interface IDisciplinaFactory
 {
-    Disciplina CriaDisciplina(DisciplinaEnvioDTO disciplinaEnvioDTO);
+    Disciplina CriarDisciplina (DisciplinaEnvioDTO disciplinaEnvioDTO);
 
-    DisplinaRetornoDTO CriaDisplinaRetornoDTO (Disciplina disciplina, IFormacaoFactory formacaoFactory);
+    Disciplina CriarDisciplina (DisciplinaAtualizaDTO disciplinaEnvioDTO);
 
-    DisplinaRetornoDTO CriaDisplinaRetornoDTO (Disciplina disciplina);
+    DisciplinaRetornoDTO CriarDisciplinaRetornoDTO (Disciplina disciplina, IFormacaoFactory formacaoFactory);
+
+    DisciplinaRetornoDTO CriarDisciplinaRetornoDTO (Disciplina disciplina);
 }

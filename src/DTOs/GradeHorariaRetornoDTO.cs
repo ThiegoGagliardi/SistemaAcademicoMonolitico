@@ -9,16 +9,10 @@ public class GradeHorariaRetornoDTO
 {
     public string Curso { get; set; } = string.Empty;
 
-    public string AreaConehcimentoCurso { get; set; } = string.Empty;
-
     public string Disciplina { get; set; } = string.Empty;      
-
-    public string CodigoDisciplina { get; set; } = string.Empty;
-
+    
     public string SiglaDisciplina { get; set; } = string.Empty;    
-
-    public string AreaConehcimentoDisciplina { get; set; } = string.Empty;
-
+    
     public string Professor { get; set; } = string.Empty;
 
     public string Dia { get; set; } = string.Empty;

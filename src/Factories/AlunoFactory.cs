@@ -7,7 +7,7 @@ namespace SistemaAcademicoMonolitico.src.Factories;
 
 public class AlunoFactory : IAlunoFactory
 {
-    public Aluno CriaAluno(AlunoEnvioDTO alunoDTO)
+    public Aluno CriarAluno(AlunoEnvioDTO alunoDTO)
     {
         Aluno aluno = new()
         {
@@ -18,8 +18,43 @@ public class AlunoFactory : IAlunoFactory
         return aluno;
     }
 
-    public AlunoRetornoDTO CriaAlunoRetornoDTO(Aluno aluno,
-                                               IGradeHorariaFactory gradeFactory)
+    public Aluno CriarAluno (AlunoEnvioAtualizaDTO alunoDTO)
+    {
+        Aluno aluno = new()
+        {
+            Id   = alunoDTO.Id,
+            Nome = alunoDTO.Nome,
+            RA   = alunoDTO.RA            
+        };
+
+        return aluno;
+    }    
+
+    public AlunoRetornoDTO CriarAlunoRetornoDTO(Aluno aluno,
+                                                IDisciplinaFactory disciplinaFactory,
+                                                ICursoFactory cursoFactory)
+    {
+        AlunoRetornoDTO alunoDTO =  new ()
+        {
+            Id     = aluno.Id,
+            Nome   = aluno.Nome,
+            RA     = aluno.RA 
+        };
+        
+        foreach (var c in aluno.Matriculas)
+        {
+            alunoDTO.CursosMatriculados.Add(cursoFactory.CriarCursoRetornoDTO(c.Curso));
+        };        
+
+        foreach (var d in aluno.Disciplinas)
+        {
+            alunoDTO.GradeHorarios.Add(disciplinaFactory.CriarDisciplinaRetornoDTO(d.Disciplina));            
+        };
+
+        return alunoDTO;
+    }
+
+    public AlunoRetornoDTO CriarAlunoRetornoDTO(Aluno aluno)
     {
         AlunoRetornoDTO alunoDTO =  new ()
         {
@@ -28,13 +63,6 @@ public class AlunoFactory : IAlunoFactory
             RA     = aluno.RA
         };
 
-        foreach (var a in aluno.Matriculas)
-        {
-            foreach (var h in a.Curso.Horarios){
-              alunoDTO.GradeHorarios.Add(gradeFactory.CriaGradeHorariaRetornoDTO(h));
-            }
-        };
-
         return alunoDTO;
-    }
+    }    
 }

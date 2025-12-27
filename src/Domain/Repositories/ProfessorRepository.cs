@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
+using SistemaAcademicoMonolitico.src.DTOs;
 using SistemaAcademicoMonolitico.src.Domain.Entities;
 using SistemaAcademicoMonolitico.src.Data;
 using SistemaAcademicoMonolitico.src.Domain.Repositories.Interfaces;
@@ -12,19 +13,18 @@ public class ProfessorRepository : IProfessorRepository
 
     public ProfessorRepository(SistemaAcademicoDbContext context)
     {
-        this._context = context;        
+        this._context = context;
     }
 
     public async Task<Professor> AddAsync(Professor professor)
     {
         var professorLocate = await _context.Professores
+                                           .Include(pf => pf.Formacoes)
+                                           .ThenInclude(f => f.Formacao)
                                            .FirstOrDefaultAsync(p => p.RegistroMec == professor.RegistroMec);
 
         if (professorLocate != null)
             throw new Exception("Professor já existe.");
-
-        if (professor == null)
-            throw new Exception("Professor inválido.");
 
         await _context.Professores.AddAsync(professor);
         await _context.SaveChangesAsync();
@@ -35,6 +35,8 @@ public class ProfessorRepository : IProfessorRepository
     public async Task<Professor> AdicionarFormacaoProfessorAsync(ProfessorFormacao professorFormacao)
     {
         var professorLocate = await _context.Professores
+                                           .Include(pf => pf.Formacoes)
+                                           .ThenInclude(f => f.Formacao)
                                            .FirstOrDefaultAsync(p => p.Id == professorFormacao.ProfessorId);
 
         if (professorLocate == null)
@@ -51,7 +53,7 @@ public class ProfessorRepository : IProfessorRepository
         return professorLocate;       
     }
 
-    public async Task<int> DeleteAsync(int id)
+    public async Task<Professor> DeleteAsync(int id)
     {
         var professorLocate = await _context.Professores.FirstOrDefaultAsync(p => p.Id == id);
 
@@ -61,7 +63,7 @@ public class ProfessorRepository : IProfessorRepository
         _context.Professores.Remove(professorLocate);
         await _context.SaveChangesAsync();
 
-        return professorLocate.Id;
+        return professorLocate;
     }
 
     public async Task<IEnumerable<Professor>> GetAllAsync(int? pagina, int? quantidade)
@@ -77,7 +79,10 @@ public class ProfessorRepository : IProfessorRepository
 
     public async Task<Professor> GetByIdAsync(int id)
     {
-        var professorLocate = await _context.Professores.FirstOrDefaultAsync(p => p.Id == id);
+        var professorLocate = await _context.Professores
+                                            .Include(f => f.Formacoes)
+                                            .ThenInclude(f => f.Formacao)
+                                            .FirstOrDefaultAsync(p => p.Id == id);
 
         if (professorLocate == null)
             throw new Exception("Professor não localizado");
@@ -95,7 +100,6 @@ public class ProfessorRepository : IProfessorRepository
 
         return professor;
     }
-
     public async Task<Professor> UpdateAsync(Professor professor)
     {
         var professorLocate = await _context.Professores.FirstOrDefaultAsync(p => p.Id == professor.Id);
@@ -117,28 +121,36 @@ public class ProfessorRepository : IProfessorRepository
         if (grade == null)
             throw new Exception("Horario inválido.");
 
-        var professorLocate = await _context.Professores
+        var professorLocalizado = await _context.Professores
                                            .FirstOrDefaultAsync(p => p.Id == grade.ProfessorId);
 
-        if (professorLocate == null)
+        if (professorLocalizado == null)
           throw new Exception("Professor não localizado.");
 
-        Formacao ?formacaoLocate = null;
+        Formacao formacaoLocalizada = null;
 
-        foreach (var f in professorLocate.Formacoes)
+        foreach (var f in professorLocalizado.Formacoes)
         {
-             formacaoLocate = grade.Disciplina.Formacoes.FirstOrDefault(df => df.Id == f.FormacaoId);
+             formacaoLocalizada = grade.Disciplina.Formacoes.FirstOrDefault(df => df.Id == f.FormacaoId);
 
-             if (formacaoLocate != null) 
+             if (formacaoLocalizada != null) 
                break;
-        };       
+        };
 
-        if (formacaoLocate == null)
-            throw new Exception("Professor não tem formação para lecionar.");
+        if (formacaoLocalizada == null)
+            throw new Exception("Professor não tem formação para lecionar.");        
 
-        professorLocate.Horarios.Add(grade);
+
+        foreach (var g in professorLocalizado.Horarios)
+        {
+             if ((g.HoraInicio >= grade.HoraInicio) && 
+                 (g.HoraFim <= grade.HoraFim))
+               throw new Exception("Professor já tem horário preenchido.");
+        };
+        
+        professorLocalizado.Horarios.Add(grade);
         await _context.SaveChangesAsync();
 
-        return professorLocate;
+        return professorLocalizado;
     }
 }

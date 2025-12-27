@@ -7,33 +7,34 @@ namespace SistemaAcademicoMonolitico.src.Factories;
 
 public class ProfessorFactory : IProfessorFactory
 {
-    public async Task<Professor> CriarProfessorAsync(ProfessorEnvioDTO professorDto)
+    public Professor CriarProfessor(ProfessorEnvioDTO professorDto)
     {
         Professor professor = new()
         {
             Nome = professorDto.Nome,
             RegistroMec = professorDto.RegistroMec,
-            DataContratacao = DateOnly.Parse(professorDto.DataContratacao)
+            Nivel  = professorDto.Nivel,
+            DataContratacao = DateTime.Parse(professorDto.DataContratacao)
         };
 
         return professor;        
     }
 
-    public async Task<Professor> CriarProfessorAsync(ProfessorAtualizaDTO professorDto)
+    public Professor CriarProfessor(ProfessorAtualizaDTO professorDto)
     {
         Professor professor = new()
         {
             Id              = professorDto.Id,
             Nome            = professorDto.Nome,
             RegistroMec     = professorDto.RegistroMec,
-            DataContratacao = DateOnly.Parse(professorDto.DataContratacao)
+            DataContratacao = DateTime.Parse(professorDto.DataContratacao)
         };
 
         return professor;        
     }
    
 
-    public async Task<ProfessorRetornoDTO> CriarProfessorDTOAsync(Professor professor, 
+    public ProfessorRetornoDTO CriarProfessorDTO(Professor professor, 
                                                            IFormacaoFactory formacaoFactory,
                                                            IHorarioFactory horarioFactory)
     {
@@ -59,7 +60,7 @@ public class ProfessorFactory : IProfessorFactory
         return professorDto;       
     }
 
-    public async Task<ProfessorFormacao> CriarProfessorFormacaoAsync(ProfessorFormacaoDTO formacaoDTO)
+    public ProfessorFormacao CriarProfessorFormacao(ProfessorFormacaoDTO formacaoDTO)
     {
         ProfessorFormacao formacao = new()
         {
@@ -72,7 +73,7 @@ public class ProfessorFactory : IProfessorFactory
         return formacao;   
     }
 
-    public async Task<GradeHoraria> CriarGradeHorariaAsync (GradeHorariaEnvioDTO gradeDTO)
+    public GradeHoraria CriarGradeHoraria (GradeHorariaEnvioDTO gradeDTO)
     {
         GradeHoraria grade = new ()
         {

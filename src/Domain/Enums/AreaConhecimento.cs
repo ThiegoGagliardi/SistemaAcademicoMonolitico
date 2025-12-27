@@ -6,7 +6,7 @@ namespace SistemaAcademicoMonolitico.Domain.Enums
         NaoEspecificada = 0, 
 
         // 1. Ciências Exatas e da Terra
-        CienciasExatasETerra = 1,
+        CienciasExatas = 1,
         
         // 2. Ciências Biológicas
         CienciasBiologicas = 2,

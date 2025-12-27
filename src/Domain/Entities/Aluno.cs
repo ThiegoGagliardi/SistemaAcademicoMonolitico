@@ -10,4 +10,6 @@ public class Aluno
 
     public IList<MatriculaAlunoCurso> Matriculas { get; set; }  = new List<MatriculaAlunoCurso>();
 
+    public IList<AlunoCursoDisciplina> Disciplinas { get; set; }  = new List<AlunoCursoDisciplina>();
+
 }

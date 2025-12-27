@@ -5,4 +5,6 @@ namespace SistemaAcademicoMonolitico.src.Domain.Repositories.Interfaces;
 public interface IAlunoRepository : IRepository<Aluno>
 {
     Task<Aluno> MatricularAlunoCursoAsync(MatriculaAlunoCurso matricula);
+
+    Task<IEnumerable<Aluno>> GetByNomeAsync(string nome);
 }

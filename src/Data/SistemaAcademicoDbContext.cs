@@ -17,6 +17,8 @@ public class SistemaAcademicoDbContext : DbContext
     public DbSet<Disciplina> Disciplinas { get; set; }
 
     public DbSet<Formacao> Formacoes { get; set; }
+    
+    public DbSet<GradeHoraria> GradeHoraria { get; set; }
 
     public SistemaAcademicoDbContext(DbContextOptions options) : base(options)
     {

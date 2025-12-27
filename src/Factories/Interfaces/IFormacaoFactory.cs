@@ -7,5 +7,7 @@ public interface IFormacaoFactory
 {
     Formacao CriarFormacao (FormacaoEnvioDTO formacaoDTO);
 
-    FormacaoRetornoDTO CriarFormacaoRetornoDTO (Formacao formacao);    
+    FormacaoRetornoDTO CriarFormacaoRetornoDTO (Formacao formacao);  
+
+    Formacao CriarFormacaoAtualizaAsync (FormacaoAtualizaDTO formacaoDTO); 
 }

@@ -16,6 +16,6 @@ public class CursoRetornoDTO
     public string AreaConhecimento { get; set;} = string.Empty;
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-    public IList<DisplinaRetornoDTO> Disciplinas { get; set; } = new List<DisplinaRetornoDTO>();
+    public IList<DisciplinaRetornoDTO> Disciplinas { get; set; } = new List<DisciplinaRetornoDTO>();
 
 }

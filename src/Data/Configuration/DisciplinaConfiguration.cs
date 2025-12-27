@@ -27,6 +27,11 @@ public class DisciplinaConfiguration : IEntityTypeConfiguration<Disciplina>
         builder.Property(d => d.AreaConhecimento)
                .HasColumnName("Area_Conhecimento")
                .IsRequired()               
-               .HasMaxLength(100);                       
+               .HasMaxLength(100); 
+
+        builder.HasMany(d => d.Formacoes)
+               .WithMany(f => f.Disciplinas)
+               .UsingEntity(j => j.ToTable("DisciplinasFormacoes"));
+                                     
     }
 }

@@ -34,7 +34,7 @@ namespace SistemaAcademicoMonolitico.Migrations
 
                     b.HasIndex("FormacoesId");
 
-                    b.ToTable("DisciplinaFormacao");
+                    b.ToTable("DisciplinasFormacoes", (string)null);
                 });
 
             modelBuilder.Entity("SistemaAcademicoMonolitico.src.Domain.Entities.Aluno", b =>
@@ -44,6 +44,9 @@ namespace SistemaAcademicoMonolitico.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("DisciplinaId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Nome")
                         .IsRequired()
@@ -56,6 +59,8 @@ namespace SistemaAcademicoMonolitico.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DisciplinaId");
 
                     b.ToTable("Alunos", (string)null);
                 });
@@ -90,7 +95,7 @@ namespace SistemaAcademicoMonolitico.Migrations
 
                     b.HasIndex("DisciplinaId");
 
-                    b.ToTable("Aluno_Cruso_Discplina", (string)null);
+                    b.ToTable("Aluno_Curso_Discplina", (string)null);
                 });
 
             modelBuilder.Entity("SistemaAcademicoMonolitico.src.Domain.Entities.Curso", b =>
@@ -138,12 +143,6 @@ namespace SistemaAcademicoMonolitico.Migrations
                         .HasColumnType("int")
                         .HasColumnName("Carga_Horaria");
 
-                    b.Property<int?>("CursoId1")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("DisciplinaId1")
-                        .HasColumnType("int");
-
                     b.Property<string>("Ementa")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -151,11 +150,7 @@ namespace SistemaAcademicoMonolitico.Migrations
 
                     b.HasKey("CursoId", "DisciplinaId");
 
-                    b.HasIndex("CursoId1");
-
                     b.HasIndex("DisciplinaId");
-
-                    b.HasIndex("DisciplinaId1");
 
                     b.ToTable("Cursos_Disciplinas", (string)null);
                 });
@@ -242,9 +237,6 @@ namespace SistemaAcademicoMonolitico.Migrations
                     b.Property<int>("ProfessorId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("CursoId1")
-                        .HasColumnType("int");
-
                     b.Property<int>("Dia")
                         .HasMaxLength(100)
                         .HasColumnType("int");
@@ -261,18 +253,11 @@ namespace SistemaAcademicoMonolitico.Migrations
                         .HasColumnType("time")
                         .HasColumnName("Hora_Inicio");
 
-                    b.Property<int?>("ProfessorId1")
-                        .HasColumnType("int");
-
                     b.HasKey("CursoId", "DisciplinaId", "ProfessorId");
-
-                    b.HasIndex("CursoId1");
 
                     b.HasIndex("DisciplinaId");
 
                     b.HasIndex("ProfessorId");
-
-                    b.HasIndex("ProfessorId1");
 
                     b.ToTable("Grade_Horaria", (string)null);
                 });
@@ -285,9 +270,6 @@ namespace SistemaAcademicoMonolitico.Migrations
                     b.Property<int>("CursoId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("AlunoId1")
-                        .HasColumnType("int");
-
                     b.Property<DateOnly>("DataFim")
                         .HasColumnType("Date");
 
@@ -298,8 +280,6 @@ namespace SistemaAcademicoMonolitico.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("AlunoId", "CursoId");
-
-                    b.HasIndex("AlunoId1");
 
                     b.HasIndex("CursoId");
 
@@ -314,8 +294,11 @@ namespace SistemaAcademicoMonolitico.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateOnly>("DataContratacao")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("DataContratacao")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Nivel")
+                        .HasColumnType("int");
 
                     b.Property<string>("Nome")
                         .IsRequired()
@@ -345,14 +328,8 @@ namespace SistemaAcademicoMonolitico.Migrations
                     b.Property<int>("FormacaoId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("FormacaoId1")
-                        .HasColumnType("int");
-
                     b.Property<DateOnly>("Inicio")
                         .HasColumnType("Date");
-
-                    b.Property<int?>("ProfessorId1")
-                        .HasColumnType("int");
 
                     b.Property<DateOnly>("Termino")
                         .HasColumnType("Date");
@@ -361,11 +338,7 @@ namespace SistemaAcademicoMonolitico.Migrations
 
                     b.HasIndex("FormacaoId");
 
-                    b.HasIndex("FormacaoId1");
-
-                    b.HasIndex("ProfessorId1");
-
-                    b.ToTable("ProfessoresFormacoes", (string)null);
+                    b.ToTable("Professores_Formacoes", (string)null);
                 });
 
             modelBuilder.Entity("DisciplinaFormacao", b =>
@@ -383,22 +356,29 @@ namespace SistemaAcademicoMonolitico.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("SistemaAcademicoMonolitico.src.Domain.Entities.Aluno", b =>
+                {
+                    b.HasOne("SistemaAcademicoMonolitico.src.Domain.Entities.Disciplina", null)
+                        .WithMany("Alunos")
+                        .HasForeignKey("DisciplinaId");
+                });
+
             modelBuilder.Entity("SistemaAcademicoMonolitico.src.Domain.Entities.AlunoCursoDisciplina", b =>
                 {
                     b.HasOne("SistemaAcademicoMonolitico.src.Domain.Entities.Aluno", "Aluno")
-                        .WithMany()
+                        .WithMany("Disciplinas")
                         .HasForeignKey("AlunoId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("SistemaAcademicoMonolitico.src.Domain.Entities.Curso", "Curso")
-                        .WithMany()
+                        .WithMany("AlunosDisciplinas")
                         .HasForeignKey("CursoId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("SistemaAcademicoMonolitico.src.Domain.Entities.Disciplina", "Disciplina")
-                        .WithMany()
+                        .WithMany("CursosDisciplinas")
                         .HasForeignKey("DisciplinaId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -413,24 +393,16 @@ namespace SistemaAcademicoMonolitico.Migrations
             modelBuilder.Entity("SistemaAcademicoMonolitico.src.Domain.Entities.CursoDisciplina", b =>
                 {
                     b.HasOne("SistemaAcademicoMonolitico.src.Domain.Entities.Curso", "Curso")
-                        .WithMany()
+                        .WithMany("Disciplinas")
                         .HasForeignKey("CursoId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("SistemaAcademicoMonolitico.src.Domain.Entities.Curso", null)
-                        .WithMany("Disciplinas")
-                        .HasForeignKey("CursoId1");
-
                     b.HasOne("SistemaAcademicoMonolitico.src.Domain.Entities.Disciplina", "Disciplina")
-                        .WithMany()
+                        .WithMany("Cursos")
                         .HasForeignKey("DisciplinaId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.HasOne("SistemaAcademicoMonolitico.src.Domain.Entities.Disciplina", null)
-                        .WithMany("Cursos")
-                        .HasForeignKey("DisciplinaId1");
 
                     b.Navigation("Curso");
 
@@ -440,30 +412,22 @@ namespace SistemaAcademicoMonolitico.Migrations
             modelBuilder.Entity("SistemaAcademicoMonolitico.src.Domain.Entities.GradeHoraria", b =>
                 {
                     b.HasOne("SistemaAcademicoMonolitico.src.Domain.Entities.Curso", "Curso")
-                        .WithMany()
+                        .WithMany("Horarios")
                         .HasForeignKey("CursoId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("SistemaAcademicoMonolitico.src.Domain.Entities.Curso", null)
-                        .WithMany("Horarios")
-                        .HasForeignKey("CursoId1");
-
                     b.HasOne("SistemaAcademicoMonolitico.src.Domain.Entities.Disciplina", "Disciplina")
-                        .WithMany()
+                        .WithMany("Horarios")
                         .HasForeignKey("DisciplinaId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("SistemaAcademicoMonolitico.src.Domain.Entities.Professor", "Professor")
-                        .WithMany()
+                        .WithMany("Horarios")
                         .HasForeignKey("ProfessorId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.HasOne("SistemaAcademicoMonolitico.src.Domain.Entities.Professor", null)
-                        .WithMany("Horarios")
-                        .HasForeignKey("ProfessorId1");
 
                     b.Navigation("Curso");
 
@@ -475,17 +439,13 @@ namespace SistemaAcademicoMonolitico.Migrations
             modelBuilder.Entity("SistemaAcademicoMonolitico.src.Domain.Entities.MatriculaAlunoCurso", b =>
                 {
                     b.HasOne("SistemaAcademicoMonolitico.src.Domain.Entities.Aluno", "Aluno")
-                        .WithMany()
+                        .WithMany("Matriculas")
                         .HasForeignKey("AlunoId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("SistemaAcademicoMonolitico.src.Domain.Entities.Aluno", null)
-                        .WithMany("Matriculas")
-                        .HasForeignKey("AlunoId1");
-
                     b.HasOne("SistemaAcademicoMonolitico.src.Domain.Entities.Curso", "Curso")
-                        .WithMany()
+                        .WithMany("Alunos")
                         .HasForeignKey("CursoId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -498,24 +458,16 @@ namespace SistemaAcademicoMonolitico.Migrations
             modelBuilder.Entity("SistemaAcademicoMonolitico.src.Domain.Entities.ProfessorFormacao", b =>
                 {
                     b.HasOne("SistemaAcademicoMonolitico.src.Domain.Entities.Formacao", "Formacao")
-                        .WithMany()
+                        .WithMany("Professores")
                         .HasForeignKey("FormacaoId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("SistemaAcademicoMonolitico.src.Domain.Entities.Formacao", null)
-                        .WithMany("Professores")
-                        .HasForeignKey("FormacaoId1");
-
                     b.HasOne("SistemaAcademicoMonolitico.src.Domain.Entities.Professor", "Professor")
-                        .WithMany()
+                        .WithMany("Formacoes")
                         .HasForeignKey("ProfessorId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.HasOne("SistemaAcademicoMonolitico.src.Domain.Entities.Professor", null)
-                        .WithMany("Formacoes")
-                        .HasForeignKey("ProfessorId1");
 
                     b.Navigation("Formacao");
 
@@ -524,11 +476,17 @@ namespace SistemaAcademicoMonolitico.Migrations
 
             modelBuilder.Entity("SistemaAcademicoMonolitico.src.Domain.Entities.Aluno", b =>
                 {
+                    b.Navigation("Disciplinas");
+
                     b.Navigation("Matriculas");
                 });
 
             modelBuilder.Entity("SistemaAcademicoMonolitico.src.Domain.Entities.Curso", b =>
                 {
+                    b.Navigation("Alunos");
+
+                    b.Navigation("AlunosDisciplinas");
+
                     b.Navigation("Disciplinas");
 
                     b.Navigation("Horarios");
@@ -536,7 +494,13 @@ namespace SistemaAcademicoMonolitico.Migrations
 
             modelBuilder.Entity("SistemaAcademicoMonolitico.src.Domain.Entities.Disciplina", b =>
                 {
+                    b.Navigation("Alunos");
+
                     b.Navigation("Cursos");
+
+                    b.Navigation("CursosDisciplinas");
+
+                    b.Navigation("Horarios");
                 });
 
             modelBuilder.Entity("SistemaAcademicoMonolitico.src.Domain.Entities.Formacao", b =>

@@ -5,7 +5,13 @@ namespace SistemaAcademicoMonolitico.src.Factories.Interfaces;
 
 public interface IAlunoFactory
 {
-    Aluno CriaAluno (AlunoEnvioDTO alunoDTO);
+    Aluno CriarAluno (AlunoEnvioDTO alunoDTO);
 
-    AlunoRetornoDTO CriaAlunoRetornoDTO (Aluno aluno, IGradeHorariaFactory gradeFactory);
+    Aluno CriarAluno (AlunoEnvioAtualizaDTO alunoDTO);
+
+    AlunoRetornoDTO CriarAlunoRetornoDTO (Aluno aluno, 
+                                          IDisciplinaFactory disciplinaFactory,
+                                          ICursoFactory cursoFactory);
+    
+    AlunoRetornoDTO CriarAlunoRetornoDTO (Aluno aluno);
 }

@@ -9,13 +9,29 @@ using SistemaAcademicoMonolitico.src.Services.Interfaces;
 using SistemaAcademicoMonolitico.src.Domain.Repositories.Interfaces;
 using SistemaAcademicoMonolitico.src.Domain.Repositories;
 
-
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddControllers();
 
-string connectionString = @"";
+// Add CORS services
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        policy =>
+        {
+            policy.AllowAnyOrigin()
+                  .AllowAnyMethod()
+                  .AllowAnyHeader();
+        });
+});
+
+builder.Services.AddControllers().AddJsonOptions(x => {
+        x.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+        x.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
+    });
+
+string connectionString = "Server=sqlserver-db,1433;Database=SistemaAcademicoBD;User Id=sa;Password=S3nh@Academi.c0;TrustServerCertificate=True";
 
 var dockerConnectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
+
 if (!string.IsNullOrEmpty(dockerConnectionString))
 {
     connectionString = dockerConnectionString;
@@ -27,6 +43,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IProfessorRepository, ProfessorRepository>();
+builder.Services.AddScoped<IFormacaoRepository, FormacaoRepository>();
+builder.Services.AddScoped<IAlunoRepository, AlunoRepository>();
+builder.Services.AddScoped<ICursoRepository, CursoRepository>();
+builder.Services.AddScoped<IDisciplinaRepository, DisciplinaRepository>();
+builder.Services.AddScoped<IAtribuicaoAulaRepository, AtribuicaoAulaRepository>();
 
 builder.Services.AddScoped<IProfessorFactory, ProfessorFactory>();
 builder.Services.AddScoped<IAlunoFactory, AlunoFactory>();
@@ -37,6 +58,11 @@ builder.Services.AddScoped<IGradeHorariaFactory, GradeHorariaFactory>();
 builder.Services.AddScoped<IHorarioFactory, HorarioFactory>();
 
 builder.Services.AddScoped<IProfessorService, ProfessorService>();
+builder.Services.AddScoped<IFormacaoService, FormacaoService>();
+builder.Services.AddScoped<IDisciplinaService, DisciplinaService>();
+builder.Services.AddScoped<ICursoService, CursoService>();
+builder.Services.AddScoped<IAtribuicaoAulaService, AtribuicaoAulaService>();
+builder.Services.AddScoped<IAlunoService, AlunoService>();
 
 var app = builder.Build();
 
@@ -46,9 +72,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+ app.UseHttpsRedirection();
 
 app.UseRouting();
+
+app.UseCors("AllowAll");
 
 app.MapControllers();
 

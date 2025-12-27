@@ -17,7 +17,23 @@ public class FormacaoFactory : IFormacaoFactory
            Instituicao      = formacaoDTO.Instituicao,
            ValorPontuacao   = formacaoDTO.ValorPontuacao,
            Nivel            = (NivelFormacao) Enum.Parse(typeof(NivelFormacao), formacaoDTO.Nivel, true),
-           AreaConhecimento = (AreaConhecimento) Enum.Parse(typeof(AreaConhecimento), formacaoDTO.Nivel, true)
+           AreaConhecimento = (AreaConhecimento) Enum.Parse(typeof(AreaConhecimento), formacaoDTO.AreaConhecimento, true)
+        };
+        
+        return formacao;
+    }
+
+    public Formacao CriarFormacaoAtualizaAsync(FormacaoAtualizaDTO formacaoDTO)
+    {
+        Formacao formacao = new ()
+        {
+
+           Id               = formacaoDTO.Id,             
+           Nome             = formacaoDTO.Nome,
+           Instituicao      = formacaoDTO.Instituicao,
+           ValorPontuacao   = formacaoDTO.ValorPontuacao,
+           Nivel            = (NivelFormacao) Enum.Parse(typeof(NivelFormacao), formacaoDTO.Nivel, true),
+           AreaConhecimento = (AreaConhecimento) Enum.Parse(typeof(AreaConhecimento), formacaoDTO.AreaConhecimento, true)
         };
         
         return formacao;
@@ -27,7 +43,7 @@ public class FormacaoFactory : IFormacaoFactory
     {
         FormacaoRetornoDTO formacaoDTO = new ()
         {
-                        
+           Id               = formacao.Id,                        
            Nome             = formacao.Nome,
            Instituicao      = formacao.Instituicao,
            ValorPontuacao   = formacao.ValorPontuacao,

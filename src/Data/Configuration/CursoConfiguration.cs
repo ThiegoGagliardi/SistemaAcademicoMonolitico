@@ -22,7 +22,7 @@ public class CursoConfiguration : IEntityTypeConfiguration<Curso>
 
         builder.Property(c => c.AreaConhecimento)
                .HasColumnName("Area_Conhecimento")
-               .HasMaxLength(100);             
+               .HasMaxLength(100);            
 
     }
 }

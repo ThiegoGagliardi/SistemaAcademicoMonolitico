@@ -10,7 +10,7 @@ public enum NivelFormacao
     EnsinoTecnico = 2,
 
     // Nível Superior
-    SuperiorGraduacao = 3,
+    Superior = 3,
 
     // Nível Pós-Graduação (Lato Sensu - Especialização / MBA)
     PosGraduacaoLatoSensu = 4,

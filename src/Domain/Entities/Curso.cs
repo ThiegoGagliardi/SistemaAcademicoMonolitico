@@ -16,4 +16,7 @@ public class Curso
 
     public List<GradeHoraria> Horarios { get; set; } = new();
 
+    public IList<MatriculaAlunoCurso> Alunos { get; set; }  = new List<MatriculaAlunoCurso>();
+
+    public IList<AlunoCursoDisciplina> AlunosDisciplinas { get; set; }  = new List<AlunoCursoDisciplina>();
 }

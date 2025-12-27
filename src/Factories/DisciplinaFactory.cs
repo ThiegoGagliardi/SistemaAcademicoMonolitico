@@ -7,10 +7,24 @@ namespace SistemaAcademicoMonolitico.src.Factories;
 
 public class DisciplinaFactory : IDisciplinaFactory
 {
-    public Disciplina CriaDisciplina(DisciplinaEnvioDTO disciplinaEnvioDTO)
+    public Disciplina CriarDisciplina(DisciplinaEnvioDTO disciplinaEnvioDTO)
     { 
-        Disciplina disciplina =  new ()
+        Disciplina disciplina = new ()
         {
+            Nome             = disciplinaEnvioDTO.Nome,
+            Codigo           = disciplinaEnvioDTO.Codigo,
+            Sigla            = disciplinaEnvioDTO.Sigla,
+            AreaConhecimento = (AreaConhecimento) Enum.Parse(typeof(AreaConhecimento), disciplinaEnvioDTO.AreaConhecimento , true)
+        };
+
+        return disciplina;
+    }
+
+    public Disciplina CriarDisciplina (DisciplinaAtualizaDTO disciplinaEnvioDTO)
+    {
+        Disciplina disciplina = new ()
+        {
+            Id               = disciplinaEnvioDTO.Id,
             Nome             = disciplinaEnvioDTO.Nome,
             Codigo           = disciplinaEnvioDTO.Codigo,
             Sigla            = disciplinaEnvioDTO.Sigla,
@@ -18,14 +32,14 @@ public class DisciplinaFactory : IDisciplinaFactory
             
         };
 
-        return disciplina;
+        return disciplina;        
     }
 
-    public DisplinaRetornoDTO CriaDisplinaRetornoDTO (Disciplina disciplina,                                                      
+    public  DisciplinaRetornoDTO CriarDisciplinaRetornoDTO (Disciplina disciplina,                                                      
                                                       IFormacaoFactory formacaoFactory)
     {
 
-        DisplinaRetornoDTO disciplinaDTO = new () 
+        DisciplinaRetornoDTO disciplinaDTO = new () 
         {
             Id               = disciplina.Id,
             Nome             = disciplina.Nome,
@@ -33,20 +47,19 @@ public class DisciplinaFactory : IDisciplinaFactory
             Sigla            = disciplina.Sigla,
             AreaConhecimento = disciplina.AreaConhecimento.ToString()
             
-        };
-
+        };              
+        
         foreach (var f in disciplina.Formacoes)
-        {
+        {           
             disciplinaDTO.Formacoes.Add(formacaoFactory.CriarFormacaoRetornoDTO(f));            
         }   
 
         return disciplinaDTO;
     }
 
-    public DisplinaRetornoDTO CriaDisplinaRetornoDTO (Disciplina disciplina)
+    public DisciplinaRetornoDTO CriarDisciplinaRetornoDTO (Disciplina disciplina)
     {
-
-        DisplinaRetornoDTO disciplinaDTO = new () 
+        DisciplinaRetornoDTO disciplinaDTO = new () 
         {
             Id               = disciplina.Id,
             Nome             = disciplina.Nome,

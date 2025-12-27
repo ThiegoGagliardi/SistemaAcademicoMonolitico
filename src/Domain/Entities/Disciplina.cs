@@ -16,6 +16,11 @@ public class Disciplina
 
     public IList<CursoDisciplina> Cursos { get; set;} = new List<CursoDisciplina>();
 
-     public IList<Formacao> Formacoes { get; set;} = new List<Formacao>();
+    public IList<Formacao> Formacoes { get; set;} = new List<Formacao>();
 
+    public IList<Aluno> Alunos { get; set;} = new List<Aluno>();
+
+    public List<GradeHoraria> Horarios { get; set; } = new();
+
+    public IList<AlunoCursoDisciplina> CursosDisciplinas { get; set; }  = new List<AlunoCursoDisciplina>();
 }

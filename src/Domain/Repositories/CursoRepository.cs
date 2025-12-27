@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SistemaAcademicoMonolitico.src.Domain.Entities;
 using SistemaAcademicoMonolitico.src.Data;
 using SistemaAcademicoMonolitico.src.Domain.Repositories.Interfaces;
+using SistemaAcademicoMonolitico.Domain.Enums;
 
 namespace SistemaAcademicoMonolitico.src.Domain.Repositories.Interfaces;
 
@@ -12,7 +13,7 @@ public class CursoRepository : ICursoRepository
 
     public CursoRepository(SistemaAcademicoDbContext context)
     {
-        this._context = context;        
+        this._context = context;
     }
 
     public async Task<Curso> AddAsync(Curso curso)
@@ -22,9 +23,6 @@ public class CursoRepository : ICursoRepository
 
         if (cursoLocate != null)
             throw new Exception("Curso já existe.");
-
-        if (cursoLocate == null)
-            throw new Exception("Curso inválido.");
 
         await _context.Cursos.AddAsync(curso);
         await _context.SaveChangesAsync();
@@ -50,7 +48,7 @@ public class CursoRepository : ICursoRepository
         return cursoLocate;
     }
 
-    public async Task<int> DeleteAsync(int id)
+    public async Task<Curso> DeleteAsync(int id)
     {
         var cursoLocate = await _context.Cursos.FirstOrDefaultAsync(c => c.Id == id);
 
@@ -60,7 +58,7 @@ public class CursoRepository : ICursoRepository
         _context.Cursos.Remove(cursoLocate);
         await _context.SaveChangesAsync();
 
-        return cursoLocate.Id;
+        return cursoLocate;
     }
 
     public async Task<IEnumerable<Curso>> GetAllAsync(int? pagina, int? quantidade)
@@ -68,10 +66,30 @@ public class CursoRepository : ICursoRepository
         pagina = pagina ?? 1;
         quantidade = quantidade ?? 10;
 
-        return await this._context.Cursos                                 
+        return await this._context.Cursos
                                   .Skip(((int)pagina - 1) * (int)quantidade)
                                   .Take((int)quantidade)
                                   .ToListAsync();
+    }
+
+    public async Task<IEnumerable<Curso>> GetByNomeAsync(string nome)
+    {
+        var cursoLocalizado = await _context.Cursos.Where(c => c.Nome == nome).ToListAsync();
+
+        if (cursoLocalizado == null)
+            throw new Exception("Curso não localizado");
+
+        return cursoLocalizado;
+    }
+
+    public async Task<IEnumerable<Curso>> GetByAreaConhecimentoAsync(AreaConhecimento area)
+    {
+        var cursoLocalizado = await _context.Cursos.Where(c => c.AreaConhecimento == area).ToListAsync();
+
+        if (cursoLocalizado == null)
+            throw new Exception("Curso não localizado");
+
+        return cursoLocalizado;
     }
 
     public async Task<Curso> GetByIdAsync(int id)
@@ -91,13 +109,13 @@ public class CursoRepository : ICursoRepository
         if (cursoLocate == null)
             throw new Exception("Curso não localizado.");
 
-        cursoLocate.Nome       = curso.Nome;
-        cursoLocate.Descricao  = curso.Descricao;
-        cursoLocate.AreaConhecimento = cursoLocate.AreaConhecimento;        
-        
+        cursoLocate.Nome = curso.Nome;
+        cursoLocate.Descricao = curso.Descricao;
+        cursoLocate.AreaConhecimento = cursoLocate.AreaConhecimento;
+
         _context.Cursos.Update(cursoLocate);
         await _context.SaveChangesAsync();
 
         return cursoLocate;
-    }   
+    }
 }

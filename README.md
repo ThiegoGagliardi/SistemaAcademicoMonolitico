@@ -118,7 +118,7 @@ O projeto é configurado para ser executado em um ambiente Docker, incluindo o b
 
 Arquivos de Configuração
 
-docker-compose.yml: Orquestra três serviços: sqlserver-db (MS SQL Server Express), migrations (que garante que o banco de dados seja atualizado com as migrações do EF Core) e SystemaAcademicoApp-api (o servidor web).
+docker-compose.yml: Orquestra três serviços: sqlserver-db (MS SQL Server Express), migrations (que garante que o banco de dados seja atualizado com as migrações do EF Core) e SistemaAcademicoApp-api (o servidor web).
 
 Dockerfile (Target debug): Imagem principal da API, incluindo o vsdbg para permitir o anexo do depurador do VS Code.
 

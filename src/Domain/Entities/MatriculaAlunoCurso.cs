@@ -15,6 +15,6 @@ public class MatriculaAlunoCurso
     public StatusAlunoCurso Status { get; set; }
 
     public Aluno Aluno { get; set; }
-
+    
     public Curso Curso { get; set;}
 }

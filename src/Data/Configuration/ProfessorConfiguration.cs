@@ -29,5 +29,4 @@ public class ProfessorConfiguration : IEntityTypeConfiguration<Professor>
                .HasColumnType("decimal(12,4)")
                .HasDefaultValue(0);
     }
-
 }
