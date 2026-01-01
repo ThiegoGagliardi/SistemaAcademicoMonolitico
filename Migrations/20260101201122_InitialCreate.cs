@@ -18,7 +18,7 @@ namespace SistemaAcademicoMonolitico.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Nome = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Descricao = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Descricao = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     Area_Conhecimento = table.Column<int>(type: "int", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
@@ -33,8 +33,8 @@ namespace SistemaAcademicoMonolitico.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Nome = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Codigo = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Sigla = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false, defaultValue: ""),
+                    Codigo = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Sigla = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true, defaultValue: ""),
                     Area_Conhecimento = table.Column<int>(type: "int", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
@@ -103,7 +103,7 @@ namespace SistemaAcademicoMonolitico.Migrations
                     CursoId = table.Column<int>(type: "int", nullable: false),
                     DisciplinaId = table.Column<int>(type: "int", nullable: false),
                     Carga_Horaria = table.Column<int>(type: "int", maxLength: 100, nullable: false),
-                    Ementa = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Ementa = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     Ativo = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -218,7 +218,7 @@ namespace SistemaAcademicoMonolitico.Migrations
                     DataInicio = table.Column<DateOnly>(type: "Date", nullable: false),
                     DataFim = table.Column<DateOnly>(type: "Date", nullable: false),
                     Status = table.Column<int>(type: "int", maxLength: 100, nullable: false),
-                    Nota = table.Column<decimal>(type: "Decimal(10,2)", nullable: false)
+                    MediaFinal = table.Column<decimal>(type: "Decimal(10,2)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -237,6 +237,41 @@ namespace SistemaAcademicoMonolitico.Migrations
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Aluno_Curso_Discplina_Disciplinas_DisciplinaId",
+                        column: x => x.DisciplinaId,
+                        principalTable: "Disciplinas",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Aluno_Curso_Discplina_Nota",
+                columns: table => new
+                {
+                    AlunoId = table.Column<int>(type: "int", nullable: false),
+                    CursoId = table.Column<int>(type: "int", nullable: false),
+                    DisciplinaId = table.Column<int>(type: "int", nullable: false),
+                    Bimestre = table.Column<string>(type: "varchar", nullable: false),
+                    Data = table.Column<DateOnly>(type: "Date", nullable: false),
+                    Nota = table.Column<decimal>(type: "Decimal(10,2)", nullable: false),
+                    Peso = table.Column<int>(type: "INT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Aluno_Curso_Discplina_Nota", x => new { x.AlunoId, x.DisciplinaId, x.CursoId, x.Bimestre });
+                    table.ForeignKey(
+                        name: "FK_Aluno_Curso_Discplina_Nota_Alunos_AlunoId",
+                        column: x => x.AlunoId,
+                        principalTable: "Alunos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Aluno_Curso_Discplina_Nota_Cursos_CursoId",
+                        column: x => x.CursoId,
+                        principalTable: "Cursos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Aluno_Curso_Discplina_Nota_Disciplinas_DisciplinaId",
                         column: x => x.DisciplinaId,
                         principalTable: "Disciplinas",
                         principalColumn: "Id",
@@ -281,6 +316,16 @@ namespace SistemaAcademicoMonolitico.Migrations
                 column: "DisciplinaId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Aluno_Curso_Discplina_Nota_CursoId",
+                table: "Aluno_Curso_Discplina_Nota",
+                column: "CursoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Aluno_Curso_Discplina_Nota_DisciplinaId",
+                table: "Aluno_Curso_Discplina_Nota",
+                column: "DisciplinaId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Alunos_DisciplinaId",
                 table: "Alunos",
                 column: "DisciplinaId");
@@ -321,6 +366,9 @@ namespace SistemaAcademicoMonolitico.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Aluno_Curso_Discplina");
+
+            migrationBuilder.DropTable(
+                name: "Aluno_Curso_Discplina_Nota");
 
             migrationBuilder.DropTable(
                 name: "Cursos_Disciplinas");

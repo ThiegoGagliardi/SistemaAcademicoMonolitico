@@ -57,9 +57,7 @@ public class AlunoRepository : IAlunoRepository
                 DisciplinaId = d.DisciplinaId,
 
                 DataInicio = matricula.DataInicio,
-                DataFim    = matricula.DataInicio.AddMonths(6),
-
-                Status = Enum.StatusAlunoDisciplina.EmCurso
+                DataFim    = matricula.DataInicio.AddMonths(6)               
             };
 
             alunoLocate.Disciplinas.Add(disciplina);                        
@@ -88,7 +86,7 @@ public class AlunoRepository : IAlunoRepository
         pagina = pagina ?? 1;
         quantidade = quantidade ?? 10;
 
-        return await this._context.Alunos                                 
+        return await this._context.Alunos                                         
                                   .Skip(((int)pagina - 1) * (int)quantidade)
                                   .Take((int)quantidade)
                                   .ToListAsync();
@@ -100,6 +98,7 @@ public class AlunoRepository : IAlunoRepository
                                         .Include(m => m.Matriculas)
                                         .ThenInclude(c => c.Curso)
                                         .Include(d => d.Disciplinas)
+                                        .Include(n => n.Notas)
                                         .ThenInclude(c => c.Disciplina)
                                         .FirstOrDefaultAsync(a => a.Id == id);
 
@@ -117,7 +116,22 @@ public class AlunoRepository : IAlunoRepository
             throw new Exception("Aluno não localizado");
 
         return alunoLocalizado;
-    }    
+    }  
+
+    public async Task<IEnumerable<Aluno>> GetByCursoId(int cursoId)
+    {
+        var alunoLocalizado = await _context.Alunos
+                                            .Include(m => m.Matriculas)
+                                            .ThenInclude(c => c.Curso)
+                                            .Include(d => d.Disciplinas)
+                                            .ThenInclude(c => c.Disciplina)
+                                            .Where(a => a.Matriculas.Any(m => m.CursoId == cursoId)).ToListAsync();
+
+        if (alunoLocalizado == null)
+          throw new Exception("Aluno não localizado");
+
+        return alunoLocalizado;        
+    }
 
     public async Task<Aluno> UpdateAsync(Aluno aluno)
     {

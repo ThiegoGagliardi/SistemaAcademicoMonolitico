@@ -14,7 +14,7 @@ public class FormacaoRepository : IFormacaoRepository
 
     public FormacaoRepository(SistemaAcademicoDbContext context)
     {
-        this._context = context;        
+        this._context = context;
     }
 
     public async Task<Formacao> AddAsync(Formacao formacao)
@@ -24,9 +24,6 @@ public class FormacaoRepository : IFormacaoRepository
 
         if (formacaoLocate != null)
             throw new Exception("Formação já existe.");
-
-        if (formacao == null)
-            throw new Exception("Formação inválido.");
 
         await _context.Formacoes.AddAsync(formacao);
         await _context.SaveChangesAsync();

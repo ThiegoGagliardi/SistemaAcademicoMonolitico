@@ -48,6 +48,7 @@ builder.Services.AddScoped<IAlunoRepository, AlunoRepository>();
 builder.Services.AddScoped<ICursoRepository, CursoRepository>();
 builder.Services.AddScoped<IDisciplinaRepository, DisciplinaRepository>();
 builder.Services.AddScoped<IAtribuicaoAulaRepository, AtribuicaoAulaRepository>();
+builder.Services.AddScoped<INotasAlunoRepository,NotasAlunoRepository>();
 
 builder.Services.AddScoped<IProfessorFactory, ProfessorFactory>();
 builder.Services.AddScoped<IAlunoFactory, AlunoFactory>();
@@ -56,6 +57,8 @@ builder.Services.AddScoped<IDisciplinaFactory, DisciplinaFactory>();
 builder.Services.AddScoped<IFormacaoFactory, FormacaoFactory>();
 builder.Services.AddScoped<IGradeHorariaFactory, GradeHorariaFactory>();
 builder.Services.AddScoped<IHorarioFactory, HorarioFactory>();
+builder.Services.AddScoped<INotasAlunoFactory,NotasAlunoFactory>();
+
 
 builder.Services.AddScoped<IProfessorService, ProfessorService>();
 builder.Services.AddScoped<IFormacaoService, FormacaoService>();
@@ -63,6 +66,7 @@ builder.Services.AddScoped<IDisciplinaService, DisciplinaService>();
 builder.Services.AddScoped<ICursoService, CursoService>();
 builder.Services.AddScoped<IAtribuicaoAulaService, AtribuicaoAulaService>();
 builder.Services.AddScoped<IAlunoService, AlunoService>();
+builder.Services.AddScoped<INotasAlunoService, NotasAlunoService>();
 
 var app = builder.Build();
 

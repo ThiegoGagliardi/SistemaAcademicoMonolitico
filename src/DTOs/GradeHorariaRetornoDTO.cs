@@ -11,7 +11,7 @@ public class GradeHorariaRetornoDTO
 
     public string Disciplina { get; set; } = string.Empty;      
     
-    public string SiglaDisciplina { get; set; } = string.Empty;    
+    public string SiglaDisciplina { get; set; } = string.Empty;
     
     public string Professor { get; set; } = string.Empty;
 

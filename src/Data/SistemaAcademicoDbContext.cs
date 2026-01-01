@@ -20,6 +20,10 @@ public class SistemaAcademicoDbContext : DbContext
     
     public DbSet<GradeHoraria> GradeHoraria { get; set; }
 
+    public DbSet<AlunoCursoDisciplinaNota> Notas { get; set;}  
+     
+    public DbSet<AlunoCursoDisciplina> Medias { get; set;}  
+
     public SistemaAcademicoDbContext(DbContextOptions options) : base(options)
     {
 
@@ -38,5 +42,6 @@ public class SistemaAcademicoDbContext : DbContext
         builder.ApplyConfiguration(new GradeHorariaConfiguration());
         builder.ApplyConfiguration(new MatriculaAlunoCursoConfiguration());
         builder.ApplyConfiguration(new AlunoCursoDisciplinaConfiguration());
+        builder.ApplyConfiguration(new AlunoCursoDisciplinaNotaConfiguration());
     }
 }

@@ -1,5 +1,7 @@
 
-namespace SistemaAcademicoMonolitico.src.Domain.Entities;
+using SistemaAcademicoMonolitico.src.Domain.Entities;
+
+namespace SistemaAcademicoMonolitico.src.Domain;
 
 public class RanqueiaProfessor
 {

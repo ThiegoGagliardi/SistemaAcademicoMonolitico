@@ -12,4 +12,6 @@ public class Aluno
 
     public IList<AlunoCursoDisciplina> Disciplinas { get; set; }  = new List<AlunoCursoDisciplina>();
 
+    public IList<AlunoCursoDisciplinaNota> Notas { get; set; }  = new List<AlunoCursoDisciplinaNota>();
+
 }

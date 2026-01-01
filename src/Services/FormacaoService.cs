@@ -6,9 +6,8 @@ using SistemaAcademicoMonolitico.Domain.Enums;
 namespace SistemaAcademicoMonolitico.src.Services.Interfaces;
 
 public class FormacaoService : IFormacaoService
-{
-    
-    private IFormacaoRepository _formacaoRepository;
+{    
+    private readonly IFormacaoRepository _formacaoRepository;
 
     private readonly IFormacaoFactory _formacaoFactory;
 

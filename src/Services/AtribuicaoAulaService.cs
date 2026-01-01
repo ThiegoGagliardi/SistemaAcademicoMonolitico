@@ -4,6 +4,7 @@ using SistemaAcademicoMonolitico.src.DTOs;
 using SistemaAcademicoMonolitico.src.Domain.Entities;
 using SistemaAcademicoMonolitico.src.Data;
 using SistemaAcademicoMonolitico.src.Domain.Repositories.Interfaces;
+using SistemaAcademicoMonolitico.src.Domain;
 using SistemaAcademicoMonolitico.src.Services.Interfaces;
 using SistemaAcademicoMonolitico.src.Factories;
 using SistemaAcademicoMonolitico.src.Factories.Interfaces;

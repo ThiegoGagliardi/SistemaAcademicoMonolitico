@@ -13,7 +13,7 @@ public class AlunoCursoDisciplinaConfiguration : IEntityTypeConfiguration<AlunoC
 
         builder.HasKey(ac => new {ac.AlunoId, ac.DisciplinaId, ac.CursoId});
 
-        builder.Property(ac => ac.Nota)
+        builder.Property(ac => ac.MediaFinal)
                .HasColumnType("Decimal(10,2)");
 
         builder.Property(ac => ac.DataInicio)
