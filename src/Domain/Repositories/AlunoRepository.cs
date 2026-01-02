@@ -98,8 +98,9 @@ public class AlunoRepository : IAlunoRepository
                                         .Include(m => m.Matriculas)
                                         .ThenInclude(c => c.Curso)
                                         .Include(d => d.Disciplinas)
-                                        .Include(n => n.Notas)
                                         .ThenInclude(c => c.Disciplina)
+                                        .Include(n => n.Notas)                                        
+                                        .AsSplitQuery()
                                         .FirstOrDefaultAsync(a => a.Id == id);
 
         if (alunoLocate == null)
@@ -125,7 +126,9 @@ public class AlunoRepository : IAlunoRepository
                                             .ThenInclude(c => c.Curso)
                                             .Include(d => d.Disciplinas)
                                             .ThenInclude(c => c.Disciplina)
-                                            .Where(a => a.Matriculas.Any(m => m.CursoId == cursoId)).ToListAsync();
+                                            .Where(a => a.Matriculas.Any(m => m.CursoId == cursoId))
+                                            .AsSplitQuery()
+                                            .ToListAsync();
 
         if (alunoLocalizado == null)
           throw new Exception("Aluno não localizado");

@@ -58,7 +58,7 @@ public class DisciplinaFactory : IDisciplinaFactory
     }
 
     public DisciplinaRetornoDTO CriarDisciplinaRetornoDTO (Disciplina disciplina)
-    {
+    {         
         DisciplinaRetornoDTO disciplinaDTO = new () 
         {
             Id               = disciplina.Id,
@@ -66,7 +66,7 @@ public class DisciplinaFactory : IDisciplinaFactory
             Codigo           = disciplina.Codigo,
             Sigla            = disciplina.Sigla,
             AreaConhecimento = disciplina.AreaConhecimento.ToString()            
-        };
+        };        
 
         return disciplinaDTO;
     }    

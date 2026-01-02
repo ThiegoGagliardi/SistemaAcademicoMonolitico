@@ -12,7 +12,7 @@ using SistemaAcademicoMonolitico.src.Data;
 namespace SistemaAcademicoMonolitico.Migrations
 {
     [DbContext(typeof(SistemaAcademicoDbContext))]
-    [Migration("20260101201122_InitialCreate")]
+    [Migration("20260101204931_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -113,7 +113,7 @@ namespace SistemaAcademicoMonolitico.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Bimestre")
-                        .HasColumnType("varchar");
+                        .HasColumnType("varchar(20)");
 
                     b.Property<DateOnly>("Data")
                         .HasColumnType("Date");

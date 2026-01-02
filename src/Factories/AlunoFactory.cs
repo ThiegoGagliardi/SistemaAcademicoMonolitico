@@ -44,11 +44,11 @@ public class AlunoFactory : IAlunoFactory
         foreach (var c in aluno.Matriculas)
         {
             alunoDTO.CursosMatriculados.Add(cursoFactory.CriarCursoRetornoDTO(c.Curso));
-        };        
+        };               
 
         foreach (var d in aluno.Disciplinas)
-        {
-            alunoDTO.GradeHorarios.Add(disciplinaFactory.CriarDisciplinaRetornoDTO(d.Disciplina));            
+        {         
+            alunoDTO.GradeHoraria.Add(disciplinaFactory.CriarDisciplinaRetornoDTO(d.Disciplina));
         };
 
         return alunoDTO;

@@ -250,7 +250,7 @@ namespace SistemaAcademicoMonolitico.Migrations
                     AlunoId = table.Column<int>(type: "int", nullable: false),
                     CursoId = table.Column<int>(type: "int", nullable: false),
                     DisciplinaId = table.Column<int>(type: "int", nullable: false),
-                    Bimestre = table.Column<string>(type: "varchar", nullable: false),
+                    Bimestre = table.Column<string>(type: "varchar(20)", nullable: false),
                     Data = table.Column<DateOnly>(type: "Date", nullable: false),
                     Nota = table.Column<decimal>(type: "Decimal(10,2)", nullable: false),
                     Peso = table.Column<int>(type: "INT", nullable: false)
@@ -359,6 +359,86 @@ namespace SistemaAcademicoMonolitico.Migrations
                 name: "IX_Professores_Formacoes_FormacaoId",
                 table: "Professores_Formacoes",
                 column: "FormacaoId");
+
+
+            migrationBuilder.Sql(@"
+/* SCRIPT DE POPULAÇÃO - SISTEMA ACADÊMICO
+   Ordem: Professores/Formações -> Disciplinas -> Cursos -> Ligações -> Alunos -> Notas
+*/
+
+-- 1. PROFESSORES
+SET IDENTITY_INSERT Professores ON;
+INSERT INTO Professores (Id, Nome, RegistroMec, DataContratacao, Nivel, Pontuacao) VALUES 
+(1, 'Dr. Alan Turing', 'MEC-123', '2020-01-01', 3, 100.00),
+(2, 'Profa. Ada Lovelace', 'MEC-456', '2021-02-15', 2, 85.50);
+SET IDENTITY_INSERT Professores OFF;
+
+-- 2. FORMAÇÕES
+SET IDENTITY_INSERT Formacoes ON;
+INSERT INTO Formacoes (Id, Nome, Instituicao, Nivel, Area_Conhecimento, Valor_Pontuacao) VALUES 
+(1, 'Doutorado em Computação', 'USP', 4, 1, 50.0000),
+(2, 'Mestrado em Matemática', 'UNICAMP', 3, 1, 30.0000);
+SET IDENTITY_INSERT Formacoes OFF;
+
+-- 3. LIGAÇÃO PROFESSOR-FORMAÇÃO
+INSERT INTO Professores_Formacoes (ProfessorId, FormacaoId, Inicio, Termino) VALUES 
+(1, 1, '2015-01-01', '2019-01-01'),
+(2, 2, '2018-01-01', '2020-01-01');
+
+-- 4. DISCIPLINAS
+SET IDENTITY_INSERT Disciplinas ON;
+INSERT INTO Disciplinas (Id, Nome, Sigla, Codigo, Area_Conhecimento) VALUES 
+(1, 'Algoritmos e Estrutura de Dados', 'AED', 'INF001', 1),
+(2, 'Cálculo Diferencial e Integral', 'CALC1', 'MAT001', 1);
+SET IDENTITY_INSERT Disciplinas OFF;
+
+-- 5. CURSOS
+SET IDENTITY_INSERT Cursos ON;
+INSERT INTO Cursos (Id, Nome, Descricao, Area_Conhecimento) VALUES 
+(1, 'Engenharia de Software', 'Bacharelado em Software', 1),
+(2, 'Análise de Sistemas', 'Tecnólogo', 1);
+SET IDENTITY_INSERT Cursos OFF;
+
+-- 6. LIGAÇÃO CURSO-DISCIPLINA (Grade Curricular)
+INSERT INTO Cursos_Disciplinas (CursoId, DisciplinaId, Carga_Horaria, Ativo, Ementa) VALUES 
+(1, 1, 80, 1, 'Ementa de Algoritmos para Engenharia'),
+(2, 1, 60, 1, 'Ementa de Algoritmos para Análise'),
+(1, 2, 80, 1, 'Cálculo para Engenheiros');
+
+-- 7. LIGAÇÃO DISCIPLINA-FORMAÇÃO (Requisitos)
+INSERT INTO DisciplinasFormacoes (DisciplinasId, FormacoesId) VALUES 
+(1, 1), 
+(2, 2);
+
+-- 8. ALUNOS
+SET IDENTITY_INSERT Alunos ON;
+INSERT INTO Alunos (Id, Nome, RA) VALUES 
+(1, 'João Silva', 'RA2024001'),
+(2, 'Maria Oliveira', 'RA2024002');
+SET IDENTITY_INSERT Alunos OFF;
+
+-- 9. MATRÍCULA ALUNO NO CURSO
+INSERT INTO Matricula_Aluno_Curso (AlunoId, CursoId, DataInicio, DataFim, Status) VALUES 
+(1, 1, '2024-01-10', '2028-12-31', 1),
+(2, 2, '2024-01-15', '2026-12-31', 1);
+
+-- 10. ALUNO CURSANDO DISCIPLINA (Relação de Semestre)
+INSERT INTO Aluno_Curso_Discplina (AlunoId, DisciplinaId, CursoId, DataInicio, DataFim, MediaFinal, Status) VALUES 
+(1, 1, 1, '2024-02-01', '2024-06-30', 0.00, 1),
+(2, 1, 2, '2024-02-01', '2024-06-30', 0.00, 1);
+
+-- 11. NOTAS (Avaliações por Bimestre)
+INSERT INTO Aluno_Curso_Discplina_Nota (AlunoId, DisciplinaId, CursoId, Bimestre, Data, Nota, Peso) VALUES 
+(1, 1, 1, '1º Bimestre', '2024-04-15', 8.50, 4),
+(1, 1, 1, '2º Bimestre', '2024-06-10', 9.00, 6),
+(2, 1, 2, '1º Bimestre', '2024-04-15', 7.00, 1);
+
+-- 12. GRADE HORÁRIA (Alocação de Professor na Turma)
+INSERT INTO Grade_Horaria (CursoId, DisciplinaId, ProfessorId, Dia, Hora_Inicio, Hora_Fim, Duracao) VALUES 
+(1, 1, 1, 1, '19:00:00', '20:40:00', '01:40:00'),
+(2, 1, 2, 2, '19:00:00', '20:40:00', '01:40:00');
+        ");                
+
         }
 
         /// <inheritdoc />

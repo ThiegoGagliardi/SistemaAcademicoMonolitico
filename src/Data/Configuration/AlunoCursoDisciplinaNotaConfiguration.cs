@@ -17,7 +17,7 @@ public class AlunoCursoDisciplinaNotaConfiguration : IEntityTypeConfiguration<Al
                .HasColumnType("Decimal(10,2)");
 
         builder.Property(ac => ac.Bimestre)
-               .HasColumnType("varchar");
+               .HasColumnType("varchar(20)");
 
         builder.Property(ac => ac.Peso)
                .HasColumnType("INT");

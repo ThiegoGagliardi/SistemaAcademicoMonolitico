@@ -16,6 +16,6 @@ public class AlunoRetornoDTO
     public IList<CursoRetornoDTO> CursosMatriculados { get; set; } = [];
     
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-    public IList<DisciplinaRetornoDTO> GradeHorarios { get; set; } = [];
+    public IList<DisciplinaRetornoDTO> GradeHoraria { get; set; } = [];
     
 }

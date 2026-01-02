@@ -110,7 +110,7 @@ namespace SistemaAcademicoMonolitico.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Bimestre")
-                        .HasColumnType("varchar");
+                        .HasColumnType("varchar(20)");
 
                     b.Property<DateOnly>("Data")
                         .HasColumnType("Date");

@@ -62,9 +62,9 @@ public class AlunoService : IAlunoService
 
     public async Task<AlunoRetornoDTO> GetByIdAsync(int id)
     {
-        var curso = await _alunoRepository.GetByIdAsync(id);
+        var aluno = await _alunoRepository.GetByIdAsync(id);
 
-        return _alunoFactory.CriarAlunoRetornoDTO(curso,
+        return _alunoFactory.CriarAlunoRetornoDTO(aluno,
                                                   _disciplinaFactory,
                                                   _cursoFactory
                                                   );       
